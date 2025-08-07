@@ -114,7 +114,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
-                <img src="/images/profile_default.jpg" alt="Sarah Johnson" className="w-full h-full object-cover" />
+                <img src="/images/Sarah_Johnson.png" alt="Sarah Johnson" className="w-full h-full object-cover" />
               </div>
               <h3 className="font-bold text-xl mb-1">Sarah Johnson</h3>
               <p className="text-blue-600 mb-2">Founder & CEO</p>
@@ -122,7 +122,7 @@ export default function AboutPage() {
             </div>
             <div className="text-center">
               <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
-                <img src="/images/profile_default.jpg" alt="Michael Chen" className="w-full h-full object-cover" />
+                <img src="/images/Michael_Chen.png" alt="Michael Chen" className="w-full h-full object-cover" />
               </div>
               <h3 className="font-bold text-xl mb-1">Michael Chen</h3>
               <p className="text-blue-600 mb-2">Operations Director</p>
@@ -130,7 +130,7 @@ export default function AboutPage() {
             </div>
             <div className="text-center">
               <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
-                <img src="/images/profile_default.jpg" alt="Emma Rodriguez" className="w-full h-full object-cover" />
+                <img src="/images/Emma_Rodriguez.png" alt="Emma Rodriguez" className="w-full h-full object-cover" />
               </div>
               <h3 className="font-bold text-xl mb-1">Emma Rodriguez</h3>
               <p className="text-blue-600 mb-2">Customer Experience</p>
@@ -138,7 +138,7 @@ export default function AboutPage() {
             </div>
             <div className="text-center">
               <div className="w-32 h-32 rounded-full overflow-hidden mx-auto mb-4">
-                <img src="/images/profile_default.jpg" alt="David Wilson" className="w-full h-full object-cover" />
+                <img src="/images/David_Wilson.png" alt="David Wilson" className="w-full h-full object-cover" />
               </div>
               <h3 className="font-bold text-xl mb-1">David Wilson</h3>
               <p className="text-blue-600 mb-2">Adventure Specialist</p>
