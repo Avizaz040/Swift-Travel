@@ -1,103 +1,170 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import TourCard from "@/components/TourCard";
+import TestimonialCard from "@/components/TestimonialCard";
+import Link from "next/link";
+import { featuredTours, testimonials } from "@/data/database";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const category = ["All Tours", "Domestic", "International", "Adventure"];
+  const [ filter, setFilter ] = useState("All Tours");
+  const tourFilter =
+    filter === "All Tours"
+      ? featuredTours
+      : featuredTours.filter((tour) => tour.category.charAt(0).toUpperCase() + tour.category.slice(1) === filter);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Header />
+
+      {/* Hero Section */}
+      <section
+        className="min-h-screen text-white py-20 bg-cover bg-center relative content-center"
+        style={{ backgroundImage: "url('/images/hero.png')" }}
+      >
+        <div className="absolute inset-0 bg-black opacity-50 z-5"></div>
+        <div className="relative container mx-auto px-4 text-center z-10">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Discover Your Perfect Getaway
+          </h1>
+          <p className="text-xl mb-8">
+            Explore breathtaking destinations with our expertly crafted tour
+            packages
+          </p>
+          <div className="flex justify-center gap-4">
+            <Link
+              href="/tours"
+              className="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-blue-50 transition"
+            >
+              View Packages
+            </Link>
+            <Link
+              href="#featured"
+              className="bg-transparent border-2 border-white px-6 py-3 rounded-lg font-medium hover:bg-white hover:text-blue-600 transition"
+            >
+              Learn More
+            </Link>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Featured Tours */}
+      <section id="featured" className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-4">
+            Featured Tour Packages
+          </h2>
+          <p className="text-gray-600 text-center mb-12">
+            Explore our most popular destinations
+          </p>
+
+          <div className="flex flex-col md:flex-row justify-center gap-4 mb-8">
+            {category.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`px-4 py-2 rounded-lg font-medium transition ${
+                  filter === cat
+                    ? "bg-blue-600 text-white"
+                    : "bg-white text-blue-600 border border-blue-600 cursor-pointer"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {tourFilter.map((tour) => (
+              <TourCard key={tour.id} tour={tour} />
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              href="/tours"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition inline-block"
+            >
+              View All Tours
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-6">About Swift Travels</h2>
+            <p className="text-gray-600 mb-6">
+              Founded in 2010, Swift Travels has been helping travelers explore
+              the world with unforgettable experiences. Our team of travel
+              experts carefully curates each tour package to ensure you get the
+              most out of your journey.
+            </p>
+            <p className="text-gray-600 mb-8">
+              We believe travel should be accessible, enjoyable, and memorable.
+              That&apos;s why we offer a range of packages to suit every budget
+              and travel style.
+            </p>
+            <Link
+              href="/about"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition inline-block"
+            >
+              Learn More
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-4">
+            What Our Customers Say
+          </h2>
+          <p className="text-gray-600 text-center mb-12">
+            Hear from travelers who&apos;ve explored with us
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {testimonials.map((testimonial) => (
+              <TestimonialCard key={testimonial.id} testimonial={testimonial} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 bg-blue-600 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-4">
+            Ready for Your Next Adventure?
+          </h2>
+          <p className="text-xl mb-8">
+            Sign up for our newsletter to receive exclusive deals and travel
+            inspiration.
+          </p>
+          <form className="max-w-md mx-auto flex shadow-2xl">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="flex-grow px-4 py-3 rounded-l-lg focus:outline-none text-gray-800 bg-white"
+              required
+            />
+            <button
+              type="submit"
+              className="bg-blue-800 px-6 py-3 rounded-r-lg font-medium hover:bg-blue-900 transition"
+            >
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <Footer />
     </div>
   );
 }
