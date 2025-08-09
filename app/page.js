@@ -33,7 +33,7 @@ export default function Home() {
             Explore breathtaking destinations with our expertly crafted tour
             packages
           </p>
-          <div className="flex justify-center gap-4">
+          <div className="flex flex-col md:flex-row justify-center gap-4">
             <Link
               href="/tours"
               className="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-blue-50 transition"
@@ -147,16 +147,16 @@ export default function Home() {
             Sign up for our newsletter to receive exclusive deals and travel
             inspiration.
           </p>
-          <form className="max-w-md mx-auto flex shadow-2xl">
+          <form className="max-w-md mx-auto flex flex-col md:flex-row gap-4 md:gap-0 md:shadow-2xl">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-grow px-4 py-3 rounded-l-lg focus:outline-none text-gray-800 bg-white"
+              className="flex-grow px-4 py-3 rounded-lg md:rounded-l-lg focus:outline-none text-gray-800 bg-white"
               required
             />
             <button
               type="submit"
-              className="bg-blue-800 px-6 py-3 rounded-r-lg font-medium hover:bg-blue-900 transition"
+              className="bg-blue-800 px-6 py-3 rounded-lg md:rounded-r-lg font-medium hover:bg-blue-900 transition"
             >
               Subscribe
             </button>
