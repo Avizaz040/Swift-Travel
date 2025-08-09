@@ -1,11 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from 'react';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
-import Link from 'next/link';
-import { qna } from '@/data/database';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from "react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import Link from "next/link";
+import { qna } from "@/data/database";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 // FAQ Item Component
 function FAQItem({ question, answer }) {
@@ -16,6 +17,7 @@ function FAQItem({ question, answer }) {
       <button
         className="w-full flex justify-between items-center p-4 text-left font-medium hover:bg-gray-50 transition"
         onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
       >
         <span>{question}</span>
         <motion.span
@@ -35,10 +37,10 @@ function FAQItem({ question, answer }) {
             animate="open"
             exit="collapsed"
             variants={{
-              open: { height: 'auto', opacity: 1 },
+              open: { height: "auto", opacity: 1 },
               collapsed: { height: 0, opacity: 0 },
             }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
             className="overflow-hidden px-4 text-gray-700"
           >
             <div className="py-3">{answer}</div>
@@ -50,17 +52,21 @@ function FAQItem({ question, answer }) {
 }
 
 export default function ContactPage() {
-  const [qnaData, setQnaData] = useState(qna)
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
-      
+
       {/* Page Hero */}
-      <section className="relative text-white py-20 bg-cover bg-center" style={{backgroundImage: "url('/images/hero-2.jpg')"}}>
-      <div className='absolute inset-0 bg-black/40'></div>
-        <div className="relative container mx-auto px-4 z-5 text-center">
+      <section
+        className="relative text-white py-20 bg-cover bg-center"
+        style={{ backgroundImage: "url('/images/hero-2.jpg')" }}
+      >
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="relative container mx-auto px-4 text-center">
           <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-          <p className="text-xl">We&apos;re here to help you plan your perfect journey</p>
+          <p className="text-xl">
+            We&apos;re here to help you plan your perfect journey
+          </p>
         </div>
       </section>
 
@@ -72,95 +78,108 @@ export default function ContactPage() {
             <div className="lg:w-1/2">
               <h2 className="text-3xl font-bold mb-6">Get in Touch</h2>
               <p className="text-gray-700 mb-8 leading-relaxed">
-                Have questions about our tours or need help planning your trip? Our travel experts are ready to assist you.
+                Have questions about our tours or need help planning your trip?
+                Our travel experts are ready to assist you.
               </p>
-              
+
               <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="bg-blue-100 p-3 rounded-full">
-                    <img src="/icons/map-pin.svg" alt="Location" className="w-5 h-5" />
+                {[
+                  {
+                    icon: "/icons/map-pin.svg",
+                    title: "Our Office",
+                    desc: "123 Travel Street\nAdventure City, AC 12345",
+                  },
+                  {
+                    icon: "/icons/phone.svg",
+                    title: "Call Us",
+                    desc: "+1 (555) 123-4567\nMon-Fri: 9am-6pm EST",
+                  },
+                  {
+                    icon: "/icons/mail.svg",
+                    title: "Email Us",
+                    desc: "info@swifttravels.com\nresponses within 24 hours",
+                  },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="bg-blue-100 p-3 rounded-full">
+                      <Image
+                        src={item.icon}
+                        alt={item.title}
+                        width={20}
+                        height={20}
+                        loading="lazy"
+                        className="invert-0"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg mb-1">{item.title}</h3>
+                      <p className="text-gray-600 whitespace-pre-line">
+                        {item.desc}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-bold text-lg mb-1">Our Office</h3>
-                    <p className="text-gray-600">123 Travel Street<br />Adventure City, AC 12345</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="bg-blue-100 p-3 rounded-full">
-                    <img src="/icons/phone.svg" alt="Phone" className="w-5 h-5 invert" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg mb-1">Call Us</h3>
-                    <p className="text-gray-600">+1 (555) 123-4567<br />Mon-Fri: 9am-6pm EST</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="bg-blue-100 p-3 rounded-full">
-                    <img src="/icons/mail.svg" alt="Email" className="w-5 h-5 invert" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg mb-1">Email Us</h3>
-                    <p className="text-gray-600">info@swifttravels.com<br />responses within 24 hours</p>
-                  </div>
-                </div>
+                ))}
               </div>
-              
+
+              {/* Social Links */}
               <div className="mt-12">
                 <h3 className="font-bold text-lg mb-4">Follow Us</h3>
                 <div className="flex gap-4">
-                  <a href="#" className="bg-blue-100 p-3 rounded-full hover:bg-blue-200 transition">
-                    <img src="/icons/facebook.svg" alt="Facebook" className="w-5 h-5 invert" />
-                  </a>
-                  <a href="#" className="bg-blue-100 p-3 rounded-full hover:bg-blue-200 transition">
-                    <img src="/icons/instagram.svg" alt="Instagram" className="w-5 h-5 invert" />
-                  </a>
-                  <a href="#" className="bg-blue-100 p-3 rounded-full hover:bg-blue-200 transition">
-                    <img src="/icons/twitter.svg" alt="Twitter" className="w-5 h-5 invert" />
-                  </a>
-                  <a href="#" className="bg-blue-100 p-3 rounded-full hover:bg-blue-200 transition">
-                    <img src="/icons/youtube.svg" alt="YouTube" className="w-5 h-5 invert" />
-                  </a>
+                  {["facebook", "instagram", "twitter", "youtube"].map(
+                    (social) => (
+                      <a
+                        key={social}
+                        href="#"
+                        aria-label={social}
+                        className="bg-blue-100 p-3 rounded-full hover:bg-blue-200 transition"
+                      >
+                        <Image
+                          src={`/icons/${social}.svg`}
+                          alt={social}
+                          width={20}
+                          height={20}
+                          loading="lazy"
+                          className="invert"
+                        />
+                      </a>
+                    )
+                  )}
                 </div>
               </div>
             </div>
-            
+
             {/* Contact Form */}
             <div className="lg:w-1/2">
               <div className="bg-white rounded-lg shadow-md p-8">
                 <h2 className="text-3xl font-bold mb-6">Send Us a Message</h2>
                 <form className="space-y-4">
-                  <div>
-                    <label className="block mb-2 font-medium">Full Name*</label>
-                    <input 
-                      type="text" 
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block mb-2 font-medium">Email*</label>
-                    <input 
-                      type="email" 
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block mb-2 font-medium">Phone Number</label>
-                    <input 
-                      type="tel" 
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
+                  {[
+                    { label: "Full Name*", type: "text", required: true },
+                    { label: "Email*", type: "email", required: true },
+                    { label: "Phone Number", type: "tel" },
+                  ].map((field, i) => (
+                    <div key={i}>
+                      <label className="block mb-2 font-medium">
+                        {field.label}
+                      </label>
+                      <input
+                        type={field.type}
+                        required={field.required}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  ))}
+
                   <div>
                     <label className="block mb-2 font-medium">Subject*</label>
-                    <select 
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    <select
                       required
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      defaultValue=""
                     >
-                      <option value="" disabled selected>Select a subject</option>
+                      <option value="" disabled>
+                        Select a subject
+                      </option>
                       <option value="general">General Inquiry</option>
                       <option value="booking">Booking Question</option>
                       <option value="custom">Custom Tour Request</option>
@@ -168,15 +187,17 @@ export default function ContactPage() {
                       <option value="other">Other</option>
                     </select>
                   </div>
+
                   <div>
                     <label className="block mb-2 font-medium">Message*</label>
-                    <textarea 
+                    <textarea
                       rows="5"
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       required
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     ></textarea>
                   </div>
-                  <button 
+
+                  <button
                     type="submit"
                     className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition"
                   >
@@ -192,41 +213,53 @@ export default function ContactPage() {
       {/* Map Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">Find Our Office</h2>
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Find Our Office
+          </h2>
           <div className="rounded-lg overflow-hidden shadow-md">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215256027567!2d-73.9878449240066!3d40.7484409713896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1623251234567!5m2!1sen!2sus" 
-              width="100%" 
-              height="450" 
-              style={{border:0}}
-              allowFullScreen="" 
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215256027567!2d-73.9878449240066!3d40.7484409713896!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1623251234567!5m2!1sen!2sus"
+              width="100%"
+              height="450"
+              style={{ border: 0 }}
+              allowFullScreen
               loading="lazy"
             ></iframe>
           </div>
         </div>
       </section>
 
-      
       {/* FAQ Section */}
       <section className="py-16">
-  <div className="container mx-auto px-4">
-    <h2 className="text-3xl font-bold text-center mb-8">Frequently Asked Questions</h2>
-
-    <div className="max-w-3xl mx-auto space-y-4">
-      {qna.map((item, index) => (
-        <FAQItem key={index} question={item.question} answer={item.answer} />
-      ))}
-    </div>
-  </div>
-</section>
-
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Frequently Asked Questions
+          </h2>
+          <div className="max-w-3xl mx-auto space-y-4">
+            {qna.map((item, index) => (
+              <FAQItem
+                key={index}
+                question={item.question}
+                answer={item.answer}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* CTA Section */}
       <section className="py-16 bg-blue-600 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Start Your Adventure?</h2>
-          <p className="text-xl mb-8">Contact us today to begin planning your dream vacation</p>
-          <Link href="/tours" className="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-blue-50 transition inline-block shadow-2xl">
+          <h2 className="text-3xl font-bold mb-4">
+            Ready to Start Your Adventure?
+          </h2>
+          <p className="text-xl mb-8">
+            Contact us today to begin planning your dream vacation
+          </p>
+          <Link
+            href="/tours"
+            className="bg-white text-blue-600 px-6 py-3 rounded-lg font-medium hover:bg-blue-50 transition inline-block shadow-2xl"
+          >
             Explore Tours
           </Link>
         </div>
