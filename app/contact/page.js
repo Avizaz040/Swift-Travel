@@ -103,7 +103,7 @@ export default function ContactPage() {
               <div className="space-y-6">
                 {[
                   {
-                    icon: "/icons/map-pin.svg",
+                    icon: "/icons/map-pin2.svg",
                     title: "Our Office",
                     desc: "123 Travel Street\nAdventure City, AC 12345",
                   },
@@ -126,7 +126,7 @@ export default function ContactPage() {
                         width={20}
                         height={20}
                         loading="lazy"
-                        className="invert-0"
+                        className="invert-70"
                       />
                     </div>
                     <div>
