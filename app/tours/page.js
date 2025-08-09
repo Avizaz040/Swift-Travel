@@ -181,7 +181,7 @@ export default function ToursPage() {
       <Header />
 
       {/* Hero */}
-      <section className="relative h-64 md:h-96">
+      <section className="relative py-20">
         <Image
           src="/images/hero-2.webp"
           alt="Travel hero"
