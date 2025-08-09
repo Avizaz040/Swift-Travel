@@ -1,11 +1,16 @@
 "use client";
 import React, { useState } from "react";
-
+import { motion, AnimatePresence } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TourCard from "@/components/TourCard";
 import { ToursPackage } from "@/data/database";
-import { CircleChevronLeft, CircleChevronRight } from "lucide-react";
+import {
+  CircleChevronLeft,
+  CircleChevronRight,
+  SlidersHorizontal,
+  XCircle,
+} from "lucide-react";
 
 export default function ToursPage() {
   const categories = [
@@ -34,31 +39,38 @@ export default function ToursPage() {
   const [selectedPrice, setSelectedPrice] = useState("Any Price");
   const [selectedDuration, setSelectedDuration] = useState("Any Duration");
 
-  // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
+  const [showFilters, setShowFilters] = useState(false);
+
   const itemsPerPage = 6;
+
+  // Reset all filters
+  const clearFilters = () => {
+    setTourSearch("");
+    setSelectedCategory("All Categories");
+    setSelectedPrice("Any Price");
+    setSelectedDuration("Any Duration");
+    setCurrentPage(1);
+  };
 
   // Filtering Logic
   const filteredTours = ToursPackage.filter((tour) => {
     const matchesSearch = tour.title
       .toLowerCase()
       .includes(tourSearch.toLowerCase());
-
     const matchesCategory =
       selectedCategory === "All Categories" ||
       tour.category.toLowerCase() === selectedCategory.toLowerCase();
-
-    const priceValue = tour.price;
     const matchesPrice =
       selectedPrice === "Any Price" ||
-      (selectedPrice === "Under ₹500" && priceValue < 500) ||
+      (selectedPrice === "Under ₹500" && tour.price < 500) ||
       (selectedPrice === "₹500 - ₹1000" &&
-        priceValue >= 500 &&
-        priceValue <= 1000) ||
+        tour.price >= 500 &&
+        tour.price <= 1000) ||
       (selectedPrice === "₹1000 - ₹2000" &&
-        priceValue > 1000 &&
-        priceValue <= 2000) ||
-      (selectedPrice === "Over ₹2000" && priceValue > 2000);
+        tour.price > 1000 &&
+        tour.price <= 2000) ||
+      (selectedPrice === "Over ₹2000" && tour.price > 2000);
 
     const durationDays = parseInt(tour.duration);
     const matchesDuration =
@@ -77,120 +89,211 @@ export default function ToursPage() {
     return matchesSearch && matchesCategory && matchesPrice && matchesDuration;
   });
 
-  // Pagination Calculations
   const totalPages = Math.ceil(filteredTours.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentTours = filteredTours.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Handle Page Change
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
-    window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll up on page change
+    // Only scroll to top if device width <= 768px (mobile/tablet)
+    if (window.innerWidth <= 768) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   };
+
+  // Inside ToursPage component
+  const activeFiltersCount =
+    (selectedCategory !== "All Categories" ? 1 : 0) +
+    (selectedPrice !== "Any Price" ? 1 : 0) +
+    (selectedDuration !== "Any Duration" ? 1 : 0) +
+    (tourSearch.trim() !== "" ? 1 : 0);
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
 
-      {/* Page Hero */}
+      {/* Hero */}
       <section
-        className="relative text-white py-20 bg-cover bg-center"
+        className="relative text-white py-24 bg-cover bg-center"
         style={{ backgroundImage: "url('/images/hero-2.jpg')" }}
       >
-        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 bg-black/50"></div>
         <div className="relative container mx-auto px-4 z-10 text-center">
-          <h1 className="text-4xl font-bold mb-4">Our Tour Packages</h1>
-          <p className="text-xl">
+          <motion.h1
+            className="text-5xl font-bold mb-4"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            Our Tour Packages
+          </motion.h1>
+          <motion.p
+            className="text-lg text-gray-200 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+          >
             Discover our carefully curated selection of travel experiences
-          </p>
+          </motion.p>
         </div>
       </section>
 
-      {/* Tours Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          {/* Filters */}
-          <div className="flex flex-col md:flex-row gap-4 mb-12 bg-white p-6 rounded-lg shadow-md">
-            <div className="flex-1">
+      {/* Filter Bar */}
+      <div className="sticky top-0 z-20 bg-white shadow-md">
+        <div className="container mx-auto px-4 py-4 flex justify-between md:justify-center items-center">
+          {/* Mobile Toggle Button */}
+          <button
+            onClick={() => setShowFilters((prev) => !prev)}
+            className="relative md:hidden flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100"
+          >
+            <SlidersHorizontal size={18} />
+            Filters
+            {activeFiltersCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                {activeFiltersCount}
+              </span>
+            )}
+          </button>
+
+          {/* Desktop Filters */}
+          <div className="hidden md:flex gap-4 w-full">
+            <input
+              type="text"
+              placeholder="Search tours..."
+              value={tourSearch}
+              onChange={(e) => setTourSearch(e.target.value)}
+              className="flex-1 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            {[categories, price, duration].map((list, i) => (
+              <select
+                key={i}
+                value={
+                  i === 0
+                    ? selectedCategory
+                    : i === 1
+                    ? selectedPrice
+                    : selectedDuration
+                }
+                onChange={(e) => {
+                  if (i === 0) setSelectedCategory(e.target.value);
+                  else if (i === 1) setSelectedPrice(e.target.value);
+                  else setSelectedDuration(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                {list.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+            ))}
+            <button
+              onClick={clearFilters}
+              className="flex items-center gap-2 px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200"
+            >
+              <XCircle size={18} /> Clear Filters
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Filters - Collapsible */}
+        <AnimatePresence>
+          {showFilters && (
+            <motion.div
+              className="md:hidden px-4 pb-4 flex flex-col gap-4 bg-white border-t border-gray-200"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
               <input
                 type="text"
                 placeholder="Search tours..."
                 value={tourSearch}
                 onChange={(e) => setTourSearch(e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-            </div>
-            <select
-              value={selectedCategory}
-              onChange={(e) => {
-                setSelectedCategory(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {categories.map((cat) => (
-                <option key={cat} value={cat}>
-                  {cat}
-                </option>
+              {[categories, price, duration].map((list, i) => (
+                <select
+                  key={i}
+                  value={
+                    i === 0
+                      ? selectedCategory
+                      : i === 1
+                      ? selectedPrice
+                      : selectedDuration
+                  }
+                  onChange={(e) => {
+                    if (i === 0) setSelectedCategory(e.target.value);
+                    else if (i === 1) setSelectedPrice(e.target.value);
+                    else setSelectedDuration(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  {list.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
               ))}
-            </select>
+              <button
+                onClick={() => {
+                  clearFilters();
+                  setShowFilters(false);
+                }}
+                className="flex items-center gap-2 px-4 py-3 bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200"
+              >
+                <XCircle size={18} /> Clear Filters
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
-            <select
-              value={selectedPrice}
-              onChange={(e) => {
-                setSelectedPrice(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {price.map((amt) => (
-                <option key={amt} value={amt}>
-                  {amt}
-                </option>
-              ))}
-            </select>
-            <select
-              value={selectedDuration}
-              onChange={(e) => {
-                setSelectedDuration(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {duration.map((days) => (
-                <option key={days} value={days}>
-                  {days}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Tours Grid */}
+      {/* Tours List */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {currentTours.map((tour) => (
-              <TourCard key={tour.id} tour={tour} />
+            {currentTours.map((tour, i) => (
+              <motion.div
+                key={tour.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: i * 0.05 }}
+                viewport={{ once: true }}
+                whileHover={{ y: -5 }}
+              >
+                <TourCard tour={tour} />
+              </motion.div>
             ))}
           </div>
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex justify-center mt-12 gap-2">
+            <motion.div
+              className="flex justify-center mt-12 gap-2 flex-wrap"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+            >
               <button
                 disabled={currentPage === 1}
                 onClick={() => handlePageChange(currentPage - 1)}
-                className=" text-blue-600 rounded-lg disabled:opacity-50 hover:bg-blue-50"
+                className="p-2 rounded-full border border-blue-600 text-blue-600 disabled:opacity-50 hover:bg-blue-50"
               >
-                <CircleChevronLeft/>
+                <CircleChevronLeft />
               </button>
 
               {[...Array(totalPages)].map((_, index) => (
                 <button
                   key={index}
                   onClick={() => handlePageChange(index + 1)}
-                  className={`px-4 py-2 border rounded-lg ${
+                  className={`px-4 py-2 rounded-full border transition ${
                     currentPage === index + 1
-                      ? "bg-blue-600 text-white"
+                      ? "bg-blue-600 text-white border-blue-600"
                       : "border-blue-600 text-blue-600 hover:bg-blue-50"
                   }`}
                 >
@@ -201,11 +304,11 @@ export default function ToursPage() {
               <button
                 disabled={currentPage === totalPages}
                 onClick={() => handlePageChange(currentPage + 1)}
-                className=" text-blue-600 rounded-lg disabled:opacity-50 hover:bg-blue-50"
+                className="p-2 rounded-full border border-blue-600 text-blue-600 disabled:opacity-50 hover:bg-blue-50"
               >
-                <CircleChevronRight/>
+                <CircleChevronRight />
               </button>
-            </div>
+            </motion.div>
           )}
         </div>
       </section>
