@@ -69,7 +69,7 @@ export const ToursPackage = [
     price: 1200,
     duration: "7 days",
     category: "international",
-    image: "/images/bali.jpg",
+    image: "/images/Bali.jpg",
   },
   {
     id: 2,
