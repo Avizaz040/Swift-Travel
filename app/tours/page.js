@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TourCard from "@/components/TourCard";
 import { ToursPackage } from "@/data/database";
+import { CircleChevronLeft, CircleChevronRight } from "lucide-react";
 
 export default function ToursPage() {
   const categories = [
@@ -178,9 +179,9 @@ export default function ToursPage() {
               <button
                 disabled={currentPage === 1}
                 onClick={() => handlePageChange(currentPage - 1)}
-                className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg disabled:opacity-50 hover:bg-blue-50"
+                className=" text-blue-600 rounded-lg disabled:opacity-50 hover:bg-blue-50"
               >
-                Previous
+                <CircleChevronLeft/>
               </button>
 
               {[...Array(totalPages)].map((_, index) => (
@@ -200,9 +201,9 @@ export default function ToursPage() {
               <button
                 disabled={currentPage === totalPages}
                 onClick={() => handlePageChange(currentPage + 1)}
-                className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg disabled:opacity-50 hover:bg-blue-50"
+                className=" text-blue-600 rounded-lg disabled:opacity-50 hover:bg-blue-50"
               >
-                Next
+                <CircleChevronRight/>
               </button>
             </div>
           )}
