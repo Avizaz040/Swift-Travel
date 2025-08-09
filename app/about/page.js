@@ -70,7 +70,7 @@ export default function AboutPage() {
       <section className="relative py-20">
         {/* optimized hero image using next/image */}
         <Image
-          src="/images/hero-2.jpg"
+          src="/images/hero-2.webp"
           alt="Travel hero"
           fill
           className="object-cover"

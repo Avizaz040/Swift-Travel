@@ -63,7 +63,7 @@ export default function ContactPage() {
       {/* Page Hero */}
       <section
         className="relative text-white py-20 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/hero-2.jpg')" }}
+        style={{ backgroundImage: "url('/images/hero-2.webp')" }}
       >
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative container mx-auto px-4 text-center">

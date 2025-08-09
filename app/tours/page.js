@@ -116,7 +116,7 @@ export default function ToursPage() {
       {/* Hero */}
       <section
         className="relative text-white py-24 bg-cover bg-center"
-        style={{ backgroundImage: "url('/images/hero-2.jpg')" }}
+        style={{ backgroundImage: "url('/images/hero-2.webp')" }}
       >
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="relative container mx-auto px-4 z-10 text-center">
@@ -124,7 +124,7 @@ export default function ToursPage() {
             className="text-5xl font-bold mb-4"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{duration: 0.7}}
+            transition={{duration: 0.7, ease: "easeOut"}}
           >
             Our Tour Packages
           </motion.h1>
@@ -132,7 +132,7 @@ export default function ToursPage() {
             className="text-lg text-gray-200 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration:0.7, delay: 0.3 }}
+            transition={{ duration:0.7, delay: 0.3, ease: "easeOut" }}
           >
             Discover our carefully curated selection of travel experiences
           </motion.p>
@@ -264,7 +264,7 @@ export default function ToursPage() {
                 key={tour.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: i * 0.05 }}
+                transition={{ duration: 0.7, delay: 0.09 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -5 }}
               >
