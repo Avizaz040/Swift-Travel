@@ -9,11 +9,15 @@ import { featuredTours, testimonials } from "@/data/database";
 
 export default function Home() {
   const category = ["All Tours", "Domestic", "International", "Adventure"];
-  const [ filter, setFilter ] = useState("All Tours");
+  const [filter, setFilter] = useState("All Tours");
   const tourFilter =
     filter === "All Tours"
       ? featuredTours
-      : featuredTours.filter((tour) => tour.category.charAt(0).toUpperCase() + tour.category.slice(1) === filter);
+      : featuredTours.filter(
+          (tour) =>
+            tour.category.charAt(0).toUpperCase() + tour.category.slice(1) ===
+            filter
+        );
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -151,12 +155,12 @@ export default function Home() {
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-grow px-4 py-3 rounded-lg md:rounded-l-lg focus:outline-none text-gray-800 bg-white"
+              className="flex-grow px-4 py-3 rounded-lg md:rounded-l-lg md:rounded-r-none focus:outline-none text-gray-800 bg-white border border-gray-300 md:border-r-0"
               required
             />
             <button
               type="submit"
-              className="bg-blue-800 px-6 py-3 rounded-lg md:rounded-r-lg font-medium hover:bg-blue-900 transition"
+              className="bg-blue-800 px-6 py-3 rounded-lg md:rounded-r-lg md:rounded-l-none font-medium hover:bg-blue-900 transition border border-blue-800 md:border-l-0"
             >
               Subscribe
             </button>

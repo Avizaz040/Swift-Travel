@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -33,6 +33,11 @@ export default function ToursPage() {
   const [selectedPrice, setSelectedPrice] = useState("Any Price");
   const [selectedDuration, setSelectedDuration] = useState("Any Duration");
 
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
+
+  // Filtering Logic
   const filteredTours = ToursPackage.filter((tour) => {
     const matchesSearch = tour.title
       .toLowerCase()
@@ -54,7 +59,7 @@ export default function ToursPage() {
         priceValue <= 2000) ||
       (selectedPrice === "Over ₹2000" && priceValue > 2000);
 
-    const durationDays = parseInt(tour.duration); // e.g., "4 days" → 4
+    const durationDays = parseInt(tour.duration);
     const matchesDuration =
       selectedDuration === "Any Duration" ||
       (selectedDuration === "1-3 Days" &&
@@ -70,6 +75,18 @@ export default function ToursPage() {
 
     return matchesSearch && matchesCategory && matchesPrice && matchesDuration;
   });
+
+  // Pagination Calculations
+  const totalPages = Math.ceil(filteredTours.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentTours = filteredTours.slice(indexOfFirstItem, indexOfLastItem);
+
+  // Handle Page Change
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll up on page change
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -107,6 +124,7 @@ export default function ToursPage() {
               value={selectedCategory}
               onChange={(e) => {
                 setSelectedCategory(e.target.value);
+                setCurrentPage(1);
               }}
               className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -121,6 +139,7 @@ export default function ToursPage() {
               value={selectedPrice}
               onChange={(e) => {
                 setSelectedPrice(e.target.value);
+                setCurrentPage(1);
               }}
               className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -134,6 +153,7 @@ export default function ToursPage() {
               value={selectedDuration}
               onChange={(e) => {
                 setSelectedDuration(e.target.value);
+                setCurrentPage(1);
               }}
               className="p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
@@ -147,48 +167,45 @@ export default function ToursPage() {
 
           {/* Tours Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredTours.map((tour) => (
+            {currentTours.map((tour) => (
               <TourCard key={tour.id} tour={tour} />
             ))}
           </div>
 
           {/* Pagination */}
-          <div className="flex justify-center mt-12 gap-2">
-            <button className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50">
-              Previous
-            </button>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg">
-              1
-            </button>
-            <button className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50">
-              2
-            </button>
-            <button className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50">
-              3
-            </button>
-            <button className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50">
-              Next
-            </button>
-          </div>
-        </div>
-      </section>
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-12 gap-2">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => handlePageChange(currentPage - 1)}
+                className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg disabled:opacity-50 hover:bg-blue-50"
+              >
+                Previous
+              </button>
 
-      {/* CTA Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">
-            Can&apos;t Find What You&apos;re Looking For?
-          </h2>
-          <p className="text-xl mb-8">
-            Contact our travel experts to create a custom itinerary just for
-            you.
-          </p>
-          <a
-            href="/contact"
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition inline-block"
-          >
-            Contact Us
-          </a>
+              {[...Array(totalPages)].map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => handlePageChange(index + 1)}
+                  className={`px-4 py-2 border rounded-lg ${
+                    currentPage === index + 1
+                      ? "bg-blue-600 text-white"
+                      : "border-blue-600 text-blue-600 hover:bg-blue-50"
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="px-4 py-2 border border-blue-600 text-blue-600 rounded-lg disabled:opacity-50 hover:bg-blue-50"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
