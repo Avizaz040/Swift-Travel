@@ -52,6 +52,10 @@ function FAQItem({ question, answer }) {
 }
 
 export default function ContactPage() {
+  const fadeUp = {
+    hidden: { opacity: 0, y: 30 },
+    show: { opacity: 1, y: 0 },
+  };
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -63,10 +67,24 @@ export default function ContactPage() {
       >
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative container mx-auto px-4 text-center">
-          <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-          <p className="text-xl">
+          <motion.h1
+            className="text-white text-4xl md:text-5xl font-bold mb-4"
+            initial="hidden"
+            animate="show"
+            variants={fadeUp}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+          >
+            Contact Us
+          </motion.h1>
+          <motion.p
+            className="text-white/90 text-lg md:text-xl max-w-3xl mx-auto"
+            initial="hidden"
+            animate="show"
+            variants={fadeUp}
+            transition={{ duration: 0.7, delay: 0.3 }}
+          >
             We&apos;re here to help you plan your perfect journey
-          </p>
+          </motion.p>
         </div>
       </section>
 

@@ -78,21 +78,27 @@ export default function AboutPage() {
         />
         <div className="absolute inset-0 bg-black/45" />
         <div className="relative z-10 container mx-auto px-4 h-full flex items-center">
-          <motion.div
-            initial="hidden"
-            animate="show"
-            variants={fadeUp}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="text-center w-full"
-          >
-            <h1 className="text-white text-4xl md:text-5xl font-bold mb-4">
+          <div className="text-center w-full">
+            <motion.h1
+              className="text-white text-4xl md:text-5xl font-bold mb-4"
+              initial="hidden"
+              animate="show"
+              variants={fadeUp}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+            >
               About Swift Travels
-            </h1>
-            <p className="text-white/90 text-lg md:text-xl max-w-3xl mx-auto">
+            </motion.h1>
+            <motion.p
+              className="text-white/90 text-lg md:text-xl max-w-3xl mx-auto"
+              initial="hidden"
+              animate="show"
+              variants={fadeUp}
+              transition={{ duration: 0.7, delay: 0.3 }}
+            >
               Discover our story, mission, and the team behind your
               unforgettable journeys
-            </p>
-          </motion.div>
+            </motion.p>
+          </div>
         </div>
       </section>
 

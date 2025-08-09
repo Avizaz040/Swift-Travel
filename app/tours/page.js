@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, delay } from "framer-motion";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TourCard from "@/components/TourCard";
@@ -124,6 +124,7 @@ export default function ToursPage() {
             className="text-5xl font-bold mb-4"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
+            transition={{duration: 0.7}}
           >
             Our Tour Packages
           </motion.h1>
@@ -131,7 +132,7 @@ export default function ToursPage() {
             className="text-lg text-gray-200 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
+            transition={{ duration:0.7, delay: 0.3 }}
           >
             Discover our carefully curated selection of travel experiences
           </motion.p>
@@ -263,7 +264,7 @@ export default function ToursPage() {
                 key={tour.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
+                transition={{ duration: 0.7, delay: i * 0.05 }}
                 viewport={{ once: true }}
                 whileHover={{ y: -5 }}
               >
